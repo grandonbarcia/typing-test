@@ -10,20 +10,11 @@ const Stats = () => {
                     </Row>
                     <Row className="mt-5">
                         <Col>
-                            Time
-                    </Col>
+                            Speed
+                         </Col>
                         <Col>
-                            Words/min
-                    </Col>
-                        <Col>
-                            Errors
-                    </Col>
-                        <Col>
-                            Error Rate
-                    </Col>
-                        <Col>
-                            Last Key
-                    </Col>
+                            Accuracy
+                        </Col>
                     </Row>
                 </Col>
             </Row>

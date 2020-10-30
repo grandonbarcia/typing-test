@@ -4,6 +4,7 @@ import { Nav } from './Nav/Nav'
 import Quote from './Component/Quote'
 import Keyboard from './Component/Keyboard'
 import InputField from './Component/InputField'
+import Stats from './Component/Stats'
 import './App.css';
 import { InputProvider } from './Context/context';
 
@@ -15,7 +16,7 @@ function App() {
         <Container className="h-75 " fluid={'xl'}>
           <Quote />
           <InputField />
-          <Keyboard />
+          <Stats />
         </Container>
       </InputProvider>
     </div >

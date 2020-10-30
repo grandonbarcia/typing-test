@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<!-- saved from url=(0039)https://cdpn.io/jh3y/fullcpgrid/QWyYZbP -->
+<html lang="en" nighteye="disabled"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  
+  
+<link rel="apple-touch-icon" type="image/png" href="https://static.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png">
+<meta name="apple-mobile-web-app-title" content="CodePen">
+
+<link rel="shortcut icon" type="image/x-icon" href="https://static.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico">
+
+<link rel="mask-icon" type="" href="https://static.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg" color="#111">
+
+
+  <title>CodePen - Code name: RamBear 😅</title>
+  
+  <link rel="stylesheet" href="./normalize.min.css">
+
+  
+  
+<style>
+* {
+  box-sizing: border-box;
+}
+:root {
+  --jeans: #737373;
+  --ground-hue: 190;
+  --belt: #000;
+  --fur-dark: #73370d;
+  --fur: #8a420f;
+  --fur-light: #b8672e;
+  --muzzle: #e6b999;
+  --tank: #d9d9d9;
+  --nose: #0d0d0d;
+  --bandana: #f20d0d;
+  --keyboard-body: #404040;
+  --keyboard-key: #8c8c8c;
+  --keyboard-accent: #7359a6;
+  --bg: hsl(var(--ground-hue), 60%, 95%);
+}
+body {
+  min-height: 100vh;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+  background: var(--bg);
+}
+svg {
+  width: 60vmin;
+}
+.ground {
+  --alpha: 0.5;
+  fill: hsla(var(--ground-hue), 60%, 60%, var(--alpha, 1));
+}
+.bear__jeans {
+  fill: var(--jeans);
+}
+.bear__belt {
+  fill: var(--belt);
+}
+.bear__muzzle {
+  fill: var(--muzzle);
+}
+.bear__shoulder--left {
+  fill: var(--fur-dark);
+}
+.bear__tank {
+  fill: var(--tank);
+}
+.bear__nose {
+  fill: var(--nose);
+}
+.bear__bandana {
+  fill: var(--bandana);
+}
+.bear__fur,
+.bear__paw {
+  fill: var(--fur);
+}
+.bear__fur--light,
+.bear__paw--light {
+  fill: var(--fur-light);
+}
+.keyboard__body {
+  fill: var(--keyboard-body);
+}
+.keyboard__key {
+  fill: var(--keyboard-key);
+}
+.keyboard__key--accented {
+  fill: var(--keyboard-accent);
+}
+.code-block {
+  fill: hsl(var(--hue), 100%, 50%);
+}
+label {
+  height: 44px;
+  width: 44px;
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  cursor: pointer;
+}
+label > svg {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+label path {
+  fill: hsl(var(--ground-hue), 60%, 60%);
+}
+label svg:nth-of-type(1) {
+  display: none;
+}
+[type='checkbox'] {
+  height: 0;
+  width: 0;
+}
+:checked ~ label svg:nth-of-type(1) {
+  display: block;
+}
+:checked ~ label svg:nth-of-type(2) {
+  display: none;
+}
+</style>
+
+  <script>
+  window.console = window.console || function(t) {};
+  window.open = function(){ console.log("window.open is disabled."); };
+  window.print   = function(){ console.log("window.print is disabled."); };
+  window.alert   = function(){ console.log("window.alert is disabled."); };
+  window.confirm = function(){ console.log("window.confirm is disabled."); };
+  window.prompt  = function(){ console.log("window.prompt is disabled."); };
+  window.Notification = function() { console.log("HTML5 notifications are disabled."); };
+</script>
+
+  
+    <script>
+    (function() {
+      /*
+      * Capture all errors for this pen
+      **/
+      window.onerror = function(/* message, file, line */) {
+        return true;
+      };
+
+      /*
+      * Capture and kill Web Audio and Speech
+      */
+      if (typeof (AudioContext) != "undefined" || typeof (webkitAudioContext) != "undefined") {
+        AudioContext = function() {
+          return false;
+        };
+
+        webkitAudioContext = function() {
+          return false;
+        };
+      }
+
+      if (typeof (mozAudioContext) != "undefined") {
+        mozAudioContext = function() {
+          return false;
+        };
+      }
+
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis = {};
+      }
+      if ("speak" in speechSynthesis) {
+        speechSynthesis.speak = function() {
+          return false;
+        };
+      }
+
+      // Kill the browser asking for access to the video cam or audio
+      navigator.getUserMedia = function() {
+      };
+      navigator.mozGetUserMedia = function() {
+      };
+      navigator.webkitGetUserMedia = function() {
+      };
+      navigator.mediaDevices.getUserMedia = function() {
+      };
+
+
+      /**
+      * Capture and kill animations after X number of seconds
+      **/
+      var __animationDuration = 4000;
+      var __animationsTimedOut = false;
+      var __animationRequests = [];
+      var __requestAnimationFrame = false;
+      var __cancelAnimationFrame = false;
+      var x, i;
+
+      var vendorsReqestAnimationFrame = [
+        "requestAnimationFrame",
+        "mozRequestAnimationFrame",
+        "webkitRequestAnimationFrame"
+      ];
+
+      // find the browsers requestAnimationFrame and cancelAnimationFrame
+      for (x = 0; x < vendorsReqestAnimationFrame.length; x++) {
+        if (!__requestAnimationFrame) {
+          __requestAnimationFrame = window[vendorsReqestAnimationFrame[x]
+          ];
+        }
+      }
+
+      __cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+
+      // Wrap the requestAnimationFrame so we can stop it in the future
+      function __reqFrame(callback, element) {
+        // after the timeout we no longer take requests
+        var timerID;
+        if (__animationsTimedOut) {
+          return 0;
+        } else {
+          timerID = __requestAnimationFrame(callback, element);
+          __animationRequests.push(timerID);
+
+          return timerID;
+        }
+      }
+
+      for (x = 0; x < vendorsReqestAnimationFrame.length; x++) {
+        window[vendorsReqestAnimationFrame[x]] = __reqFrame;
+      }
+
+      // Cancel the animations after expiration
+      setTimeout(function() {
+        for (i = 0; i < __animationRequests.length; i++) {
+          __cancelAnimationFrame(__animationRequests[i]);
+        }
+
+        var ss = window.document.createElement("style");
+        ss.textContent = "*, *::before, *::after { animation-play-state: paused !important; }";
+        var ref = window.document.getElementsByTagName("script")[0];
+        ref.parentNode.insertBefore(ss, ref);
+
+        __animationsTimedOut = true;
+      }, __animationDuration, "push");
+
+      /**
+      * Capture setInterval and setTimeout to kill after X number of seconds
+      **/
+      window.setInterval = (function(oldSetInterval) {
+        var registered = [];
+
+        function f(a,b) {
+          // check if the time has expired,
+          // after __animationDuration expires don't take anymore setIntervals
+          if (this.timedOut) {
+            return 0;
+          } else {
+            return registered[ registered.length ] = oldSetInterval(a,b);
+          }
+        }
+
+        f.clearAll = function() {
+          var r;
+
+          while (r = registered.pop()) {
+            clearInterval( r );
+          }
+
+          this.timedOut = true;
+        };
+
+        f.timedOut = false;
+
+        return f;
+      }(window.setInterval));
+
+      window.setTimeout = (function(oldSetTimeout) {
+        var registered = [];
+
+        // because some of our timeouts may time out afterwards
+        // we want to make sure they know the secret sauce to still use
+        // setTimeout after the time has expired, thats why we have a
+        // third param
+        function f(a, b, push) {
+          // check if the time has expired,
+          // after __animationDuration expires don't take anymore requests
+          if (this.timedOut && typeof(push) == "undefined") {
+            return 0;
+          } else {
+            // If push is there, never clear that interval
+            // so never add it to the registry
+            if (push) {
+              return oldSetTimeout(a,b);
+            } else {
+              return registered[ registered.length ] = oldSetTimeout(a,b);
+            }
+          }
+        }
+
+        f.clearAll = function() {
+          var r;
+
+          while (r = registered.pop()) {
+            clearTimeout( r );
+          }
+
+          this.timedOut = true;
+        };
+
+        f.timedOut = false;
+
+        return f;
+      }(window.setTimeout));
+
+      setTimeout(function() {
+
+        setTimeout.clearAll();
+        setInterval.clearAll();
+
+        // Stop Web Animations API
+        // Idea from Gregor: https://github.com/CodePen/CodePen-Bug-Reporting-Only/issues/173#issuecomment-203443301
+        // Status as of April 2020:
+        //  Chrome 80 = Stops animations
+        //  Firefox 75 = Stops animations
+        //  Safari 13 = Doesn't support WAAPI
+        //  Safari 13.1 = Stops animations
+
+        // Apparently this used to be done via `document.timeline`, but the modern method is to get the animations directly from the document.
+        let animations = ( typeof document.getAnimations === "function" && document.getAnimations() ) || (document.timeline && typeof document.timeline.getAnimations === "function" && document.timeline.getAnimations() )
+
+        if ( animations && animations.length ) {
+          animations.map(function(animation) {
+            animation.pause();
+          });
+        }
+
+      }, __animationDuration, "push");
+
+    }());
+  </script>
+
+  <script>
+  if (document.location.search.match(/type=embed/gi)) {
+    window.parent.postMessage("resize", "*");
+  }
+</script>
+
+
+</head>
+
+<body translate="no" onload="_l=&#39;t&#39;;">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 194.05 120.82">
+  <g transform="translate(58.03 -57.75)">
+    <rect class="ground" ry="3.18" y="172.21" x="33.49" height="6.36" width="102.52" style="stroke: none; stroke-width: 15.875; stroke-linecap: square; stroke-linejoin: round; stroke-miterlimit: 4; stroke-dasharray: none; stroke-dashoffset: 0; stroke-opacity: 1; --alpha:0.3944;"></rect>
+    <path class="bear__jeans" d="M79.38 136.78a39.24 46.3 0 00-38.63 38.36h12.92a25.95 30.62 0 01.3-2.26 25.95 30.62 0 01.64-2.97 25.95 30.62 0 01.89-2.87 25.95 30.62 0 011.12-2.76 25.95 30.62 0 011.36-2.6 25.95 30.62 0 011.57-2.45 25.95 30.62 0 011.77-2.23 25.95 30.62 0 011.95-2.02 25.95 30.62 0 012.1-1.78 25.95 30.62 0 012.26-1.53 25.95 30.62 0 012.36-1.25 25.95 30.62 0 012.47-.96 25.95 30.62 0 012.53-.67 25.95 30.62 0 012.57-.37 25.95 30.62 0 011.84-.08 25.95 30.62 0 012.59.16 25.95 30.62 0 012.56.45 25.95 30.62 0 012.52.76 25.95 30.62 0 012.43 1.05 25.95 30.62 0 012.34 1.33 25.95 30.62 0 012.2 1.6 25.95 30.62 0 012.07 1.85 25.95 30.62 0 011.9 2.09 25.95 30.62 0 011.71 2.3 25.95 30.62 0 011.51 2.49 25.95 30.62 0 011.3 2.65 25.95 30.62 0 011.05 2.8 25.95 30.62 0 01.82 2.9 25.95 30.62 0 01.57 2.98 25.95 30.62 0 01.14 1.4h12.93a39.24 46.3 0 00-38.66-38.37z" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:14.61518764;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></path>
+    <rect class="bear__belt" y="125.62" x="57.51" height="18.89" width="43.72" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:21.45877838;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+    <circle class="bear__shoulder bear__shoulder--left" r="11.34" cy="114.82" cx="49.51" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></circle>
+    <rect class="bear__tank" ry="4.85" y="106.5" x="54.9" height="33.43" width="48.95" style="opacity: 1; fill-opacity: 1; fill-rule: nonzero; stroke: none; stroke-width: 4.10835; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 4; stroke-dasharray: none; stroke-dashoffset: 0; stroke-opacity: 1; transform-origin: 0px 0px;" data-svg-origin="79.37500190734863 139.93000030517578" transform="matrix(1,0,0,0.9958,0,0.58771)"></rect>
+    <g class="bear__head" data-svg-origin="56.09000015258789 65.5999984741211" transform="matrix(1,0,0,1,0,0.59977)" style="transform-origin: 0px 0px;">
+      <rect class="bear__fur bear__face" ry="5.64" y="74.94" x="61.23" height="37.99" width="36.29" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:4.21629286;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+      <circle class="bear__fur bear__ear" r="7.94" cy="73.54" cx="64.03" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3.28125;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></circle>
+      <rect class="bear__bandana" ry="0" y="82.08" x="59.15" height="9.83" width="40.44" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:4.12773705;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+      <path class="bear__muzzle" d="M62.78 96.67c-.53 0-1.05.06-1.55.16v10.46a5.63 5.63 0 005.64 5.64h15.9v-6.65c0-5.32-3.76-9.6-8.43-9.6z" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:15.93559551;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></path>
+      <path class="bear__bandana bear__bandana-tie" d="M100.95 87.66h4.78c2.38 0 4.3 6.22 4.3 8.6h-9.08c-2.39 0-4.3-6.22-4.3-8.6h4.3z" style="opacity: 1; fill-opacity: 1; fill-rule: nonzero; stroke: none; stroke-width: 20.2849; stroke-linecap: square; stroke-linejoin: round; stroke-miterlimit: 4; stroke-dasharray: none; stroke-dashoffset: 0; stroke-opacity: 1; transform-origin: 0px 0px;" data-svg-origin="96.64999389648438 87.66000366210938" transform="matrix(0.97564,-0.21937,0.21937,0.97564,-16.87558,23.33751)"></path>
+      <rect class="bear__nose" ry="3.21" y="95.63" x="60.17" height="6.43" width="12.28" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.94184494;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+      <circle class="bear__fur bear__ear" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3.28125;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" cx="94.72" cy="73.54" r="7.94"></circle>
+    </g>
+    <g class="bear__keyboard-arm" data-svg-origin="104.66606254577637 113.39656677246094" transform="matrix(0.99957,0.02948,-0.02948,0.99957,3.38794,-3.0368)" style="transform-origin: 0px 0px;">
+      <g class="keyboard" transform="rotate(12.57 341.33 136.91)">
+        <g transform="matrix(1.0972 0 0 1.0972 -13.05 -63.96)">
+          <rect class="keyboard__body" y="221.42" x="29.93" height="21.7" width="76.99" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:17.24043465;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+          <g transform="translate(1.98 21.96)">
+            <rect class="keyboard__key keyboard__key--accented" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:15.59976292;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="29.2" height="3.97" x="44.35" y="215.86" ry="0"></rect>
+            <rect class="keyboard__key keyboard__key--accented" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="29.27" y="205.81"></rect>
+            <rect class="keyboard__key" y="205.81" x="64.46" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="59.43" y="205.81"></rect>
+            <rect class="keyboard__key" y="205.81" x="54.4" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="49.38" y="205.81"></rect>
+            <rect class="keyboard__key" y="205.81" x="44.35" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="34.3" y="205.81"></rect>
+            <rect class="keyboard__key" y="205.81" x="39.32" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="64.46" y="210.83"></rect>
+            <rect class="keyboard__key" y="210.83" x="59.43" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="54.4" y="210.83"></rect>
+            <rect class="keyboard__key" y="210.83" x="49.38" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="44.35" y="210.83"></rect>
+            <rect class="keyboard__key" y="210.83" x="39.32" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key keyboard__key--accented" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:19.56653404;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="9" height="3.97" x="29.27" y="210.83"></rect>
+            <rect class="keyboard__key" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="74.51" y="205.81"></rect>
+            <rect class="keyboard__key" y="210.83" x="69.49" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="74.51" y="210.83"></rect>
+            <rect class="keyboard__key" y="215.86" x="39.32" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="34.3" y="215.86"></rect>
+            <rect class="keyboard__key keyboard__key--accented" y="215.86" x="29.27" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="69.49" y="205.81"></rect>
+            <rect class="keyboard__key" y="210.83" x="89.59" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="79.54" y="210.83"></rect>
+            <rect class="keyboard__key keyboard__key--accented" y="210.83" x="84.57" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key keyboard__key--accented" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="89.59" y="215.86"></rect>
+            <rect class="keyboard__key keyboard__key--accented" y="215.86" x="84.57" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key keyboard__key--accented" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="79.54" y="215.86"></rect>
+            <rect class="keyboard__key" y="205.81" x="79.54" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" y="205.81" x="84.57" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" y="205.81" x="89.59" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="74.51" y="215.86"></rect>
+            <rect class="keyboard__key keyboard__key--accented" y="200.78" x="29.27" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="64.46" y="200.78"></rect>
+            <rect class="keyboard__key" y="200.78" x="59.43" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="54.4" y="200.78"></rect>
+            <rect class="keyboard__key" y="200.78" x="49.38" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="44.35" y="200.78"></rect>
+            <rect class="keyboard__key" y="200.78" x="34.3" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="39.32" y="200.78"></rect>
+            <rect class="keyboard__key" y="200.78" x="74.51" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" y="200.78" x="69.49" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key keyboard__key--accented" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="79.54" y="200.78"></rect>
+            <rect class="keyboard__key keyboard__key--accented" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="84.57" y="200.78"></rect>
+            <rect class="keyboard__key keyboard__key--accented" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="89.59" y="200.78"></rect>
+            <rect class="keyboard__key" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="94.62" y="210.83"></rect>
+            <rect class="keyboard__key" y="215.86" x="94.62" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="94.62" y="205.81"></rect>
+            <rect class="keyboard__key keyboard__key--accented" y="200.78" x="94.62" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" y="210.83" x="99.65" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="99.65" y="215.86"></rect>
+            <rect class="keyboard__key" y="205.81" x="99.65" height="3.97" width="3.97" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+            <rect class="keyboard__key keyboard__key--accented" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:12.99630928;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="3.97" height="3.97" x="99.65" y="200.78"></rect>
+          </g>
+        </g>
+        <rect class="bear__paw bear__paw--right" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:17.53100395;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="17.21" height="9.35" x="32.05" y="196.97" ry="4.68"></rect>
+      </g>
+      <g class="bear__arm">
+        <path class="bear__fur" d="M109.61 103.48a11.34 11.34 0 00-11.34 11.34 11.34 11.34 0 002.84 7.47v7.27H87.12a7.92 7.92 0 00-7.93 7.93c0 4.4 3.54 7.94 7.93 7.94h22.49a7.28 7.28 0 001.81-.23 7.92 7.92 0 005.17-4.1 11.47 11.47 0 001.53-5.8v-13a11.34 11.34 0 002.83-7.48 11.34 11.34 0 00-11.34-11.34z" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:18.89763832;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></path>
+        <rect class="bear__fur bear__fur--light" ry="1.98" y="132.2" x="85.99" height="3.97" width="20.03" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></rect>
+        <circle class="bear__fur bear__fur--light" r="3.4" cy="111.22" cx="113.96" style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"></circle>
+      </g>
+    </g>
+    <text class="code-block" id="original-code-block" style="font: condensed 12.2866px / 1.25 Impact; font-feature-settings: normal; text-align: start; letter-spacing: 0px; word-spacing: 0px; writing-mode: lr-tb; text-anchor: start; fill-opacity: 1; stroke: none; stroke-width: 0.307164; transform-origin: 0px 0px;" x="-12.91" y="107.23" transform="matrix(0,0,0,0,12.07813,110.09375)" data-svg-origin="-12.921875 95.09375">
+      <tspan x="-12.91" y="107.23" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:12.28657341px;font-family:Impact;-inkscape-font-specification:&#39;Impact, Condensed&#39;;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.30716431">&lt;/&gt;</tspan>
+    </text>
+    <g class="codepen"><text class="code-block" style="font: condensed 12.2866px / 1.25 Impact; font-feature-settings: normal; text-align: start; letter-spacing: 0px; word-spacing: 0px; writing-mode: lr-tb; text-anchor: start; fill-opacity: 1; stroke: none; stroke-width: 0.307164; transform-origin: 0px 0px; display: block; --hue:287.808; opacity: 0.2736;" x="-12.91" y="107.23" transform="matrix(0.95396,-0.15765,0.15765,0.95396,-37.13678,-16.83201)" data-svg-origin="-1.6953125 101.2265625">
+      <tspan x="-12.91" y="107.23" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:12.28657341px;font-family:Impact;-inkscape-font-specification:&#39;Impact, Condensed&#39;;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.30716431">&lt;/&gt;</tspan>
+    </text><text class="code-block" style="font: condensed 12.2866px / 1.25 Impact; font-feature-settings: normal; text-align: start; letter-spacing: 0px; word-spacing: 0px; writing-mode: lr-tb; text-anchor: start; fill-opacity: 1; stroke: none; stroke-width: 0.307164; transform-origin: 0px 0px; display: block; --hue:351.149; opacity: 0.4357;" x="-12.91" y="107.23" transform="matrix(1.17613,-0.13713,0.13713,1.17613,-59.57977,-18.85663)" data-svg-origin="-1.6953125 101.2265625">
+      <tspan x="-12.91" y="107.23" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:12.28657341px;font-family:Impact;-inkscape-font-specification:&#39;Impact, Condensed&#39;;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.30716431">&lt;/&gt;</tspan>
+    </text><text class="code-block" style="font: condensed 12.2866px / 1.25 Impact; font-feature-settings: normal; text-align: start; letter-spacing: 0px; word-spacing: 0px; writing-mode: lr-tb; text-anchor: start; fill-opacity: 1; stroke: none; stroke-width: 0.307164; transform-origin: 0px 0px; display: block; --hue:308.657; opacity: 0.1965;" x="-12.91" y="107.23" transform="matrix(0.84756,-0.20243,0.20243,0.84756,-37.87349,23.83478)" data-svg-origin="-1.6953125 101.2265625">
+      <tspan x="-12.91" y="107.23" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:12.28657341px;font-family:Impact;-inkscape-font-specification:&#39;Impact, Condensed&#39;;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.30716431">&lt;/&gt;</tspan>
+    </text><text class="code-block" style="font: condensed 12.2866px / 1.25 Impact; font-feature-settings: normal; text-align: start; letter-spacing: 0px; word-spacing: 0px; writing-mode: lr-tb; text-anchor: start; fill-opacity: 1; stroke: none; stroke-width: 0.307164; transform-origin: 0px 0px; display: block; --hue:100.03; opacity: 0.8785;" x="-12.91" y="107.23" transform="matrix(1.43184,-0.21504,0.21504,1.43184,-60.91332,-48.09655)" data-svg-origin="-1.6953125 101.2265625">
+      <tspan x="-12.91" y="107.23" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:12.28657341px;font-family:Impact;-inkscape-font-specification:&#39;Impact, Condensed&#39;;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.30716431">&lt;/&gt;</tspan>
+    </text><text class="code-block" style="font: condensed 12.2866px / 1.25 Impact; font-feature-settings: normal; text-align: start; letter-spacing: 0px; word-spacing: 0px; writing-mode: lr-tb; text-anchor: start; fill-opacity: 1; stroke: none; stroke-width: 0.307164; transform-origin: 0px 0px; display: block; --hue:125.449;" x="-12.91" y="107.23" transform="matrix(0.78384,-0.16096,0.16096,0.78384,-35.26115,27.00144)" data-svg-origin="-1.6953125 101.2265625">
+      <tspan x="-12.91" y="107.23" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:12.28657341px;font-family:Impact;-inkscape-font-specification:&#39;Impact, Condensed&#39;;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.30716431">&lt;/&gt;</tspan>
+    </text><text class="code-block" style="font: condensed 12.2866px / 1.25 Impact; font-feature-settings: normal; text-align: start; letter-spacing: 0px; word-spacing: 0px; writing-mode: lr-tb; text-anchor: start; fill-opacity: 1; stroke: none; stroke-width: 0.307164; transform-origin: 0px 0px; display: block; --hue:166.067;" x="-12.91" y="107.23" transform="matrix(0.54487,-0.02822,0.02822,0.54487,-10.41516,61.30919)" data-svg-origin="-1.6953125 101.2265625">
+      <tspan x="-12.91" y="107.23" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:12.28657341px;font-family:Impact;-inkscape-font-specification:&#39;Impact, Condensed&#39;;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.30716431">&lt;/&gt;</tspan>
+    </text><text class="code-block" style="font: condensed 12.2866px / 1.25 Impact; font-feature-settings: normal; text-align: start; letter-spacing: 0px; word-spacing: 0px; writing-mode: lr-tb; text-anchor: start; fill-opacity: 1; stroke: none; stroke-width: 0.307164; transform-origin: 0px 0px; display: block; --hue:201.555;" x="-12.91" y="107.23" transform="matrix(0.43883,0.03826,-0.03826,0.43883,0.52611,61.63516)" data-svg-origin="-1.6953125 101.2265625">
+      <tspan x="-12.91" y="107.23" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:12.28657341px;font-family:Impact;-inkscape-font-specification:&#39;Impact, Condensed&#39;;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.30716431">&lt;/&gt;</tspan>
+    </text><text class="code-block" style="font: condensed 12.2866px / 1.25 Impact; font-feature-settings: normal; text-align: start; letter-spacing: 0px; word-spacing: 0px; writing-mode: lr-tb; text-anchor: start; fill-opacity: 1; stroke: none; stroke-width: 0.307164; transform-origin: 0px 0px; display: block; --hue:333.943;" x="-12.91" y="107.23" transform="matrix(0,0,0,0,17.07813,117.24225)" data-svg-origin="-1.6953125 101.2265625">
+      <tspan x="-12.91" y="107.23" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:12.28657341px;font-family:Impact;-inkscape-font-specification:&#39;Impact, Condensed&#39;;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.30716431">&lt;/&gt;</tspan>
+    </text></g>
+  </g>
+</svg>
+<input id="volume" type="checkbox">
+<label for="volume" title="Toggle sound">
+  <svg viewBox="0 0 24 24">
+    <path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z"></path>
+  </svg>
+  <svg viewBox="0 0 24 24">
+    <path d="M12,4L9.91,6.09L12,8.18M4.27,3L3,4.27L7.73,9H3V15H7L12,20V13.27L16.25,17.53C15.58,18.04 14.83,18.46 14,18.7V20.77C15.38,20.45 16.63,19.82 17.68,18.96L19.73,21L21,19.73L12,10.73M19,12C19,12.94 18.8,13.82 18.46,14.64L19.97,16.15C20.62,14.91 21,13.5 21,12C21,7.72 18,4.14 14,3.23V5.29C16.89,6.15 19,8.83 19,12M16.5,12C16.5,10.23 15.5,8.71 14,7.97V10.18L16.45,12.63C16.5,12.43 16.5,12.21 16.5,12Z"></path>
+  </svg>
+</label>
+    <script src="./stopExecutionOnTimeout-157cd5b220a5c80d4ff8e0e70ac069bffd87a61252088146915e8726e5d9f147.js.download"></script>
+
+  <script src="./gsap.min.js(1).download"></script>
+  
+      <script id="rendered-js">
+const {
+  gsap: { set, timeline } } =
+window;
+
+const shared = {
+  duration: 0.075 };
+
+
+const AUDIO = {
+  CLACK_ONE: new Audio('https://assets.codepen.io/605876/clack-one.mp3'),
+  CLACK_TWO: new Audio('https://assets.codepen.io/605876/clack-two.mp3'),
+  WARZONE: new Audio('https://assets.codepen.io/605876/dial-up-warzone.mp3') };
+
+
+const CLICK_RATE = 0.65;
+
+AUDIO.WARZONE.loop = true;
+AUDIO.WARZONE.volume = 0.1;
+AUDIO.CLACK_ONE.volume = AUDIO.CLACK_TWO.volume = 0.5;
+AUDIO.CLACK_ONE.playbackRate = AUDIO.CLACK_TWO.playbackRate = CLICK_RATE;
+
+AUDIO.WARZONE.muted = AUDIO.CLACK_ONE.muted = AUDIO.CLACK_TWO.muted = true;
+const toggleAudio = () => {
+  AUDIO.WARZONE.muted = AUDIO.CLACK_ONE.muted = AUDIO.CLACK_TWO.muted = !AUDIO.
+  WARZONE.muted;
+  if (!AUDIO.WARZONE.muted) AUDIO.WARZONE.doNOTPlay();else
+  AUDIO.WARZONE.pause();
+};
+
+document.querySelector('#volume').addEventListener('input', toggleAudio);
+
+set('#original-code-block', { x: 25, y: 15, scale: 0 });
+const CODEPEN = document.querySelector('.codepen');
+const TL = timeline({
+  yoyo: true,
+  repeat: -1,
+  onStart: () => {
+    // We want to fire a code block here!
+    const block = document.querySelector('#original-code-block').cloneNode(true);
+    block.removeAttribute('id');
+    CODEPEN.appendChild(block);
+    set(block, {
+      transformOrigin: '50% 50%',
+      scale: 0,
+      x: 30,
+      '--hue': 'random(0, 360)',
+      y: 'random(15, 30)',
+      display: 'block' });
+
+    timeline({
+      onComplete: () => block.remove(),
+      onStart: () => {
+        AUDIO[Math.random() > 0.5 ? 'CLACK_ONE' : 'CLACK_TWO'].doNOTPlay();
+      } }).
+
+    to(block, {
+      x: 'random(-35, -5)',
+      y: 'random(-30, 30)',
+      scale: 'random(0.75, 1.5)',
+      rotate: 'random(-15, 15)',
+      duration: 'random(0.25, 1.25)' }).
+
+    to(
+    block,
+    {
+      opacity: 0 },
+
+    '-=0.1');
+
+  } }).
+
+to('.bear__head', {
+  yPercent: 3,
+  ...shared }).
+
+to(
+'.bear__bandana-tie',
+{
+  transformOrigin: '0 0',
+  rotate: -30,
+  ...shared },
+
+0).
+
+to(
+'.bear__keyboard-arm',
+{
+  transformOrigin: '85% 20%',
+  rotate: 4,
+  ...shared },
+
+0).
+
+to(
+'.ground',
+{
+  '--alpha': 0.25,
+  ...shared },
+
+0).
+
+to(
+'.bear__tank',
+{
+  transformOrigin: '50% 100%',
+  scaleY: 0.99,
+  ...shared },
+
+0);
+
+
+document.body.addEventListener('pointerdown', () => {
+  // Need to also adjust the playbackRate
+  TL.timeScale(0.1);
+  AUDIO.WARZONE.playbackRate = AUDIO.CLACK_ONE.playbackRate = AUDIO.CLACK_TWO.playbackRate = 10;
+});
+document.body.addEventListener('pointerup', () => {
+  TL.timeScale(1);
+  AUDIO.WARZONE.playbackRate = 1;
+  AUDIO.CLACK_ONE.playbackRate = AUDIO.CLACK_TWO.playbackRate = CLICK_RATE;
+});
+//# sourceURL=pen.js
+    </script>
+
+    <script style="display: none !important;">
+  (function() {
+    var __animationDuration = 4000;
+
+    setTimeout(function() {
+      // If onload hasn't been called, stop all requests after 2 seconds
+      if (typeof(_l) == "undefined") {
+        if (window.stop !== undefined) window.stop();
+        else if (document.execCommand !== undefined) document.execCommand("Stop", false);
+      }
+    }, 2000, "push");
+
+    /*
+    * Capture and kill CSS animations after X number of seconds
+    */
+    function pauseAnimations() {
+      var body = document.getElementsByTagName("body")[0];
+
+      if (body.addEventListener) {
+        body.addEventListener("webkitAnimationStart", listener, false);
+        body.addEventListener("webkitAnimationIteration", listener, false);
+        body.addEventListener("animationstart", listener, false);
+        body.addEventListener("animationiteration", listener, false);
+      }
+    }
+
+    function listener(e) {
+
+      var targetEl;
+
+      if (e.type == "webkitAnimationStart" || e.type == "webkitAnimationIteration") {
+
+        targetEl = e.target;
+
+        setTimeout(function() {
+          targetEl.style.webkitAnimationPlayState = "paused";
+        }, __animationDuration, "push");
+
+      } else if (e.type == "animationstart" || e.type == "animationiteration") {
+
+        targetEl = e.target;
+
+        setTimeout(function() {
+          targetEl.style.MozAnimationPlayState = "paused";
+        }, __animationDuration, 'push');
+
+      }
+    }
+
+    pauseAnimations();
+
+    // Pause all audio elements, allow the audio/video
+    // elements to render before stopping them
+    function pauseElementTypes(type) {
+      for (var i = 0, els = document.getElementsByTagName(type); i < els.length; i++) {
+        els[i].pause();
+      }
+    }
+
+    // Wait until the elements have been created to pause them
+    setTimeout(function() {
+      pauseElementTypes("audio");
+      pauseElementTypes("video");
+    }, 100);
+
+  }());
+  </script>
+
+
+  <script src="./iframeRefreshCSS-e03f509ba0a671350b4b363ff105b2eb009850f34a2b4deaadaa63ed5d970b37.js.download"></script>
+
+
+
+ 
+</body></html>

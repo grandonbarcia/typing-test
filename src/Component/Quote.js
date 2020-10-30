@@ -71,9 +71,23 @@ const Quote = () => {
         prepCurrQuote(currentQuote)
     }
 
+
+    const displayStats = () => {
+
+    }
+
+
     useEffect(() => {
 
-        input.join(' ') === currentQuote ? selectNewQuote(listOfQuotes) : prepCurrQuote(currentQuote)
+        // input.join(' ') === currentQuote ? selectNewQuote(listOfQuotes) : prepCurrQuote(currentQuote)
+
+
+        if (input.join(' ') === currentQuote) {
+            displayStats();
+
+        } else {
+            prepCurrQuote(currentQuote)
+        }
 
 
     }, [input]);
