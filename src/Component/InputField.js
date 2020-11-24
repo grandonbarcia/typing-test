@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Row, Col, InputGroup, FormControl } from 'react-bootstrap'
 import { setInputState, useInputDispatch, useInputState } from '../Context'
 
 
-const InputField = () => {
+const InputField = ({ isGamePaused, prepNewQuote }) => {
     const dispatch = useInputDispatch()
     const input = useInputState()
 
@@ -11,17 +11,45 @@ const InputField = () => {
         let inputString = e.target.value;
         setInputState(dispatch, inputString)
 
+
     }
 
+    const downHandler = ({ key }) => {
+
+        if (key === 'Escape') prepNewQuote();
+
+    }
+
+
+
+    const textBar = useRef(null);
+
+    useEffect(() => {
+
+        if (!isGamePaused) textBar.current.focus();
+
+    }, [isGamePaused]);
+
+    useEffect(() => {
+        window.addEventListener('keydown', downHandler);
+        return () => {
+            window.removeEventListener('keydown', downHandler);
+        };
+
+    }, [])
+
     return (
-        <Row className="justify-content-md-center">
-            <Col xl={10}>
+        <Row className="">
+            <Col xl={11}>
                 <InputGroup className="mb-3">
                     <FormControl
+                        value={input.join(' ')}
                         placeholder="Type here"
                         aria-label="Username"
                         aria-describedby="basic-addon1"
                         onChange={handleChange}
+                        ref={textBar}
+                        disabled={isGamePaused}
                     />
                 </InputGroup>
             </Col>
