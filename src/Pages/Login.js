@@ -3,7 +3,7 @@ import { Planet } from 'react-kawaii';
 import useForm from '../Hooks/UseForm'
 import { Row, Col, Form, FormControl, Button } from 'react-bootstrap'
 
-const URL = 'http://localhost:8080/';
+const URL = 'https://infinite-waters-36020.herokuapp.com/'
 
 const Login = () => {
 
