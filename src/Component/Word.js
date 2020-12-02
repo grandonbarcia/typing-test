@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { useInputState } from '../Context'
 
 
@@ -12,6 +12,8 @@ const Word = ({ children, id, word }) => {
 
     const input = useInputState();
 
+
+
     const checkWord = (currentWord, i) => {
         if (input[i] !== currentWord && input.length - 1 === i) {
             return green
@@ -21,21 +23,16 @@ const Word = ({ children, id, word }) => {
 
     };
 
+    let color = checkWord(word, id);
 
     const wordStyle = {
         padding: '2px',
-        backgroundColor: checkWord(word, id)
+        backgroundColor: color
     };
-
-
-
-
 
     return (
         <span style={wordStyle} >
-
             { children}
-
         </span >
     )
 }

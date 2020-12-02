@@ -1,24 +1,17 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 
-const Stats = () => {
+const Stats = ({ wpm }) => {
+
+
     return (
-        <>
-            <Row className="justify-content-md-center h-25">
-                <Col xl={7}>
-                    <Row className="mt-5">
-                    </Row>
-                    <Row className="mt-5">
-                        <Col>
-                            Speed
-                         </Col>
-                        <Col>
-                            Accuracy
-                        </Col>
-                    </Row>
-                </Col>
-            </Row>
-        </>
+
+        <Row style={{ position: 'absolute' }}>
+            <Col>
+                Speed: {wpm} WPM
+            </Col>
+        </Row>
+
 
     )
 }
