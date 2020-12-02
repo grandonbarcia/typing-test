@@ -6,9 +6,6 @@ export const setInputState = (dispatch, input) => {
 
 
 export const calcWPM = (dispatch, input) => {
-
-
-
-
     dispatch({ type: 'SET_STATS', payload: input })
 }
+
