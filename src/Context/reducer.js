@@ -1,5 +1,5 @@
 
-export const initState = []
+export const initState = [""]
 
 export const InputReducer = (initState, action) => {
 
