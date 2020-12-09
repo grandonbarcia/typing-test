@@ -5,7 +5,7 @@ const StartDescription = () => {
 
     return (
 
-        <Row className="h-50 align-items-center panel">
+        <Row className="h-25 align-items-center panel">
             <Col>
                 <Row>
                     <Col>

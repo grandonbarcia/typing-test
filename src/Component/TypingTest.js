@@ -53,7 +53,7 @@ const TypingTest = () => {
 
 
     const prepNewQuote = async () => {
-        setBtnText('Next')
+        setBtnText('Loading...')
         setInputState(dispatch, "")
         fetchQuote();
 

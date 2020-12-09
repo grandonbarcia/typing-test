@@ -27,7 +27,8 @@ const Word = ({ children, id, word }) => {
 
     const wordStyle = {
         padding: '2px',
-        backgroundColor: color
+        backgroundColor: color,
+        borderRadius: '4px',
     };
 
     return (

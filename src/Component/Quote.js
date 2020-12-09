@@ -20,7 +20,10 @@ const Quote = ({ startGame, setBtnText, isGamePaused, pauseGame, quoteIndex, cur
     const container = {
         display: 'flex',
         flexDirection: 'row',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        paddingLeft: '10px',
+        marginTop: '1px',
+        marginBottom: '10px'
     }
 
 
@@ -86,7 +89,7 @@ const Quote = ({ startGame, setBtnText, isGamePaused, pauseGame, quoteIndex, cur
 
     return (
         <>
-            <Row className="h-50 align-items-center panel" >
+            <Row className="h-25 align-items-end panel" >
                 <Col xl={11}>
                     <div style={container}>
                         {quoteToDisplay}
