@@ -3,9 +3,13 @@ import { Row, Col } from 'react-bootstrap'
 
 const StartDescription = () => {
 
+    const style = {
+        fontSize: '25px'
+    }
+
     return (
 
-        <Row className="h-25 align-items-center panel">
+        <Row style={style} className="h-50 align-items-center panel">
             <Col>
                 <Row>
                     <Col>
