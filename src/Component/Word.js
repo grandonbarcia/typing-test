@@ -13,10 +13,9 @@ const Word = ({ children, id, word }) => {
     const input = useInputState();
 
 
-
     const checkWord = (currentWord, i) => {
         if (input[i] !== currentWord && input.length - 1 === i) {
-            return green
+
         } else if (input[i] !== currentWord && input.length > i) {
             return red
         }
@@ -26,14 +25,14 @@ const Word = ({ children, id, word }) => {
     let color = checkWord(word, id);
 
     const wordStyle = {
-        padding: '2px',
+        padding: '2.3px',
         backgroundColor: color,
         borderRadius: '4px',
     };
 
     return (
         <span style={wordStyle} >
-            { children}
+            {children}
         </span >
     )
 }
