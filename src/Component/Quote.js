@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { useInputDispatch, useInputState } from '../Context'
+import Letter from './Letter'
 import Word from './Word'
+import Stats from './Stats'
 
 
 
 
-const Quote = ({ startGame, setBtnText, isGamePaused, pauseGame, quoteIndex, currentQuote, time, setTime, calculateWPM }) => {
+const Quote = ({ startGame, setBtnText, isGamePaused, pauseGame, quoteIndex, currentQuote, time, setTime, calculateWPM, author, isGameStarted, wpm, accuracy }) => {
 
     const input = useInputState();
     const dispatch = useInputDispatch();
@@ -21,9 +23,14 @@ const Quote = ({ startGame, setBtnText, isGamePaused, pauseGame, quoteIndex, cur
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
-        paddingLeft: '10px',
         marginTop: '1px',
-        marginBottom: '10px'
+        marginBottom: '10px',
+    }
+
+    const authorStyle = {
+        fontSize: '17px',
+        paddingBottom: '10px',
+        fontWeight: '700'
     }
 
 
@@ -33,7 +40,19 @@ const Quote = ({ startGame, setBtnText, isGamePaused, pauseGame, quoteIndex, cur
 
             <Word key={i} word={eachWord} id={i} >
 
-                {eachWord}
+                {
+
+                    eachWord.split("").map((eachChar, j) =>
+
+                        <Letter key={j} char={eachChar} j={j} i={i} >
+
+                            {eachChar}
+
+                        </Letter>
+
+                    )
+
+                }
 
             </Word>
         )
@@ -67,33 +86,33 @@ const Quote = ({ startGame, setBtnText, isGamePaused, pauseGame, quoteIndex, cur
         setTime(0);
         let interval = setInterval(addOne, 1000);
         pauseGame(false);
-        setBtnText('Next');
         prepCurrQuote(currentQuote);
+
         return () => clearInterval(interval);
     }, [currentQuote])
 
     const addOne = () => {
 
-        setTime((value) => value + 1);
-
+        setTime((seconds) => seconds + 1);
 
     }
 
 
-
-
-
-
-
-
-
     return (
         <>
-            <Row className="h-25 align-items-end panel" >
-                <Col xl={11}>
+            <Row className="h-50 align-items-end panel" >
+                <Col>
+                    {isGamePaused && isGameStarted ? <Stats wpm={wpm} accuracy={accuracy} /> : ' '}
+                </Col>
+                <Col xl={12}>
                     <div style={container}>
                         {quoteToDisplay}
                     </div>
+                </Col>
+            </Row>
+            <Row>
+                <Col style={authorStyle}>
+                    {author}
                 </Col>
             </Row>
         </>
