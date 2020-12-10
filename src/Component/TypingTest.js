@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Row, Col } from 'react-bootstrap'
 import Quote from './Quote';
 import StartDescription from './StartDescription'
@@ -23,7 +23,8 @@ const TypingTest = () => {
     const [btnText, setBtnText] = useState('Start');
 
     const [quoteIndex, setQuoteIndex] = useState(0);
-    const [currentQuote, pickQuote] = useState(' ');
+    const [currentQuote, setQuote] = useState(' ');
+    const [author, setAuthor] = useState(' ')
 
     const [time, setTime] = useState(0);
     const [wpm, setWpm] = useState(0);
@@ -32,6 +33,8 @@ const TypingTest = () => {
     const input = useInputState();
     const dispatch = useInputDispatch()
 
+    const textBar = useRef(null);
+
 
     const fetchQuote = async () => {
 
@@ -39,12 +42,15 @@ const TypingTest = () => {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         }
+
         try {
             let response = await fetch(URL, requestOptions);
             let data = await response.json();
-
-            pickQuote(data.quote)
-
+            console.log(data);
+            setQuote(data.quote)
+            setAuthor(data.arthur);
+            setBtnText('Next')
+            textBar.current.focus();
         } catch (err) {
             console.log(err)
         }
@@ -57,10 +63,8 @@ const TypingTest = () => {
         setInputState(dispatch, "")
         fetchQuote();
 
-        if (!isGameStarted) {
-            startGame(true)
+        if (!isGameStarted) startGame(true)
 
-        }
 
     }
 
@@ -70,28 +74,33 @@ const TypingTest = () => {
         let minute = time / 60
         let grossWPM = (allTypedEntries / 5) / minute;
 
-        console.log('Characters: ', allTypedEntries);
-        console.log('Minutes: ', minute);
-        console.log("Gross WPM :", grossWPM);
-
         setWpm(grossWPM.toFixed(2));
 
 
     }
 
     const calculateAccuracy = () => {
+        let allTypedEntries
+        let errorsTyped
+        let minutes
 
     }
+
+    useEffect(() => {
+
+
+
+    }, [input])
 
 
     return (
         <Row className="h-75 justify-content-md-center">
-            <Col xl={8} className=" h-50 align-self-center">
+            <Col xl={8} className=" h-75 align-self-center">
 
-                {isGamePaused && isGameStarted ? <Stats wpm={wpm} accuracy={accuracy} /> : ' '}
 
-                {isGameStarted ? <Quote startGame={startGame} pauseGame={pauseGame} isGamePaused={isGamePaused} setBtnText={setBtnText} quoteIndex={quoteIndex} currentQuote={currentQuote} time={time} setTime={setTime} calculateWPM={calculateWPM} /> : <StartDescription />}
-                <InputField isGamePaused={isGamePaused} prepNewQuote={prepNewQuote} />
+
+                {isGameStarted ? <Quote startGame={startGame} pauseGame={pauseGame} isGamePaused={isGamePaused} setBtnText={setBtnText} quoteIndex={quoteIndex} currentQuote={currentQuote} time={time} setTime={setTime} calculateWPM={calculateWPM} author={author} isGameStarted={isGameStarted} wpm={wpm} accuracy={accuracy} /> : <StartDescription />}
+                <InputField isGamePaused={isGamePaused} prepNewQuote={prepNewQuote} textBar={textBar} />
                 <StartButton handleClick={prepNewQuote} text={btnText} />
             </Col>
         </Row>
