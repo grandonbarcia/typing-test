@@ -3,10 +3,12 @@ import { Row, Col } from 'react-bootstrap'
 
 const Stats = ({ wpm }) => {
 
-
+    const style = {
+        fontSize: '25px',
+    }
     return (
 
-        <Row style={{ position: 'absolute' }}>
+        <Row style={style}>
             <Col>
                 Speed: {wpm} WPM
             </Col>
