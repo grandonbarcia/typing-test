@@ -21,7 +21,7 @@ const StartButton = ({ handleClick, text }) => {
         <Row>
             <Col>
                 <Button variant="primary" onClick={handleClick}>
-                    {text === 'Loading...' ? <LoadSpinner /> : ''}
+                    {text === 'Loading...' ? <LoadSpinner style={{ marginRight: '5px' }} /> : ''}
                     {text}
                 </Button>
             </Col>
