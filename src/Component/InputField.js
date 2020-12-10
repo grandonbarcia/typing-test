@@ -3,7 +3,7 @@ import { Row, Col, InputGroup, FormControl } from 'react-bootstrap'
 import { setInputState, useInputDispatch, useInputState } from '../Context'
 
 
-const InputField = ({ isGamePaused, prepNewQuote }) => {
+const InputField = ({ isGamePaused, prepNewQuote, textBar }) => {
     const dispatch = useInputDispatch()
     const input = useInputState()
 
@@ -22,13 +22,8 @@ const InputField = ({ isGamePaused, prepNewQuote }) => {
 
 
 
-    const textBar = useRef(null);
 
-    useEffect(() => {
 
-        if (!isGamePaused) textBar.current.focus();
-
-    }, [isGamePaused]);
 
     useEffect(() => {
         window.addEventListener('keydown', downHandler);
