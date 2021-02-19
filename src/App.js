@@ -23,7 +23,7 @@ function App() {
       <InputProvider>
         <Router>
           <NavBar />
-          <Container className="h-100" fluid={'xl'}>
+          <Container className="h-75" fluid={'xl'}>
             <Switch>
               <Route exact path="/">
                 <TypingTest />
@@ -35,7 +35,6 @@ function App() {
                 <Admin />
               </Route>
             </Switch>
-
           </Container>
         </Router>
       </InputProvider>
