@@ -86,24 +86,20 @@ const TypingTest = () => {
 
     }
 
-    useEffect(() => {
 
-
-
-    }, [input])
 
 
     return (
+
         <Row className="h-75 justify-content-md-center">
             <Col xl={8} className=" h-75 align-self-center">
-
-
-
                 {isGameStarted ? <Quote startGame={startGame} pauseGame={pauseGame} isGamePaused={isGamePaused} setBtnText={setBtnText} quoteIndex={quoteIndex} currentQuote={currentQuote} time={time} setTime={setTime} calculateWPM={calculateWPM} author={author} isGameStarted={isGameStarted} wpm={wpm} accuracy={accuracy} /> : <StartDescription />}
+                <Stats wpm={wpm} accuracy={accuracy} />
                 <InputField isGamePaused={isGamePaused} prepNewQuote={prepNewQuote} textBar={textBar} />
                 <StartButton handleClick={prepNewQuote} text={btnText} />
             </Col>
         </Row>
+
     )
 }
 

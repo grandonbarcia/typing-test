@@ -34,7 +34,7 @@ const InputField = ({ isGamePaused, prepNewQuote, textBar }) => {
     }, [])
 
     return (
-        <Row className="">
+        <Row className="input__field">
             <Col xl={11}>
                 <InputGroup className="mb-3">
                     <FormControl

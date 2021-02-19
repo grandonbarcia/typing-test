@@ -1,10 +1,11 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 
-const Stats = ({ wpm }) => {
+const Stats = ({ wpm, accuracy }) => {
 
     const style = {
         fontSize: '25px',
+        marginBottom: '25px'
     }
     return (
 
@@ -12,7 +13,9 @@ const Stats = ({ wpm }) => {
             <Col>
                 Speed: {wpm} WPM
             </Col>
+
         </Row>
+
 
 
     )

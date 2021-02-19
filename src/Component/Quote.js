@@ -4,10 +4,6 @@ import Col from 'react-bootstrap/Col'
 import { useInputDispatch, useInputState } from '../Context'
 import Letter from './Letter'
 import Word from './Word'
-import Stats from './Stats'
-
-
-
 
 const Quote = ({ startGame, setBtnText, isGamePaused, pauseGame, quoteIndex, currentQuote, time, setTime, calculateWPM, author, isGameStarted, wpm, accuracy }) => {
 
@@ -16,8 +12,10 @@ const Quote = ({ startGame, setBtnText, isGamePaused, pauseGame, quoteIndex, cur
 
 
 
-    const [quoteToDisplay, setQuoteToDisplay] = useState([]);
 
+    const [quoteToDisplay, setQuoteToDisplay] = useState([]);
+    const [numOfErrors, setNumOfErrors] = useState(0);
+    const [errorIndex, setErrorIndex] = useState([]);
 
     const container = {
         display: 'flex',
@@ -59,26 +57,27 @@ const Quote = ({ startGame, setBtnText, isGamePaused, pauseGame, quoteIndex, cur
     }
 
 
-    const prepCurrQuote = (quote) => {
-        let currentQuote = quote.split(' ');
-        let mutatedQuote = configQuote(currentQuote);
+    const prepCurrQuote = () => {
+        let mutatedQuote = configQuote(currentQuote.split(' '));
         setQuoteToDisplay(mutatedQuote)
     }
 
 
+
+
     useEffect(() => {
-
         let inputString = input.join(' ');
-
+        console.log('----------------------------');
+        console.log("Errors: ", numOfErrors);
         if (inputString === currentQuote) {
-
+            setNumOfErrors(0)
             pauseGame(true);
             setBtnText('Start');
             calculateWPM();
         } else {
+
             prepCurrQuote(currentQuote)
         }
-
 
     }, [input]);
 
@@ -99,24 +98,58 @@ const Quote = ({ startGame, setBtnText, isGamePaused, pauseGame, quoteIndex, cur
 
 
     return (
-        <>
-            <Row className="h-50 align-items-end panel" >
-                <Col>
-                    {isGamePaused && isGameStarted ? <Stats wpm={wpm} accuracy={accuracy} /> : ' '}
-                </Col>
-                <Col xl={12}>
-                    <div style={container}>
-                        {quoteToDisplay}
-                    </div>
-                </Col>
-            </Row>
-            <Row>
-                <Col style={authorStyle}>
-                    {author}
-                </Col>
-            </Row>
-        </>
+        <Row className="h-50 align-items-end quote" >
+            <Col>
+                <Row>
+                    <Col xl={12}>
+                        <div style={container}>
+                            {quoteToDisplay}
+                        </div>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col style={authorStyle}>
+                        {author}
+                    </Col>
+                </Row>
+            </Col>
+        </Row>
     )
 }
 
 export default Quote
+// console.log(errorIndex.length);
+//             console.log('Wrong');
+//             if (errorIndex.length > 0) {
+//                 let count = 0;
+//                 for (let i = 0; i < 2; i++) {
+//                     if (arr[i] === errorIndex[0][i]) {
+//                         count++;
+//                     }
+//                 }
+//                 if (count === 2) {
+//                     console.log("Fix This ")
+//                     setErrorIndex(errorIndex.filter((el) => {
+
+//                         for (let j = 0; j < 2; j++) {
+//                             let count = 0;
+//                             if (el[j] == arr[j]) {
+//                                 count++
+//                             }
+//                         }
+
+//                         if (count === 2) {
+//                             return false
+//                         } else {
+//                             return true
+//                         }
+
+//                     }));
+//                 }
+
+//             } else {
+
+//                 setErrorIndex((oldarray) => [[currWordIndex, currCharIndex], ...oldarray])
+//                 setNumOfErrors((errors) => errors + 1)
+//                 console.log("Curr Char: ", arr)
+//             }
