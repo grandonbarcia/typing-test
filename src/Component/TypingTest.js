@@ -62,7 +62,7 @@ const TypingTest = () => {
         setBtnText('Loading...')
         setInputState(dispatch, "")
         fetchQuote();
-
+        setWpm(0)
         if (!isGameStarted) startGame(true)
 
 
@@ -79,12 +79,7 @@ const TypingTest = () => {
 
     }
 
-    const calculateAccuracy = () => {
-        let allTypedEntries
-        let errorsTyped
-        let minutes
 
-    }
 
 
 
