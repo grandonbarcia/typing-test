@@ -3,3 +3,18 @@ html, body, #root, .App {
   height: 100%;
 }
 
+
+.App {
+  background-color: #eeeeee;
+  color: #222831;
+}
+
+
+
+.quote {
+  margin-bottom: 50px;
+}
+
+.start__description{
+  margin-bottom: 50px;
+}
