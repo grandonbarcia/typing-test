@@ -37,7 +37,7 @@ const TypingTest = () => {
     const textBar = useRef(null);
 
 
-    const fetchQuote = async () => {
+    const fetchQuote = () => {
 
 
         // Fetch random quote from ListOfQuotes.js in Data Folder
@@ -48,8 +48,12 @@ const TypingTest = () => {
 
         setQuote(randomQuote.quote)
         setAuthor(randomQuote.arthur);
+
         setBtnText('Next')
-        textBar.current.focus();
+
+
+
+
 
         // FETCH RANDOM QUOTE FROM BACKEND 
 
@@ -73,13 +77,16 @@ const TypingTest = () => {
     }
 
 
-    const prepNewQuote = async () => {
+    const prepNewQuote = () => {
+
+        pauseGame(false);
+        setTimeout(() => textBar.current.focus(), 100)
         setBtnText('Loading...')
         setInputState(dispatch, "")
         fetchQuote();
-        setWpm(0)
-        if (!isGameStarted) startGame(true)
+        setWpm(0);
 
+        if (!isGameStarted) startGame(true)
 
     }
 
