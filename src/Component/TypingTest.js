@@ -6,10 +6,11 @@ import InputField from './InputField';
 import StartButton from './StartButton';
 import { setInputState, useInputDispatch, useInputState } from '../Context'
 import Stats from './Stats';
+import ListOfQuotes from '../Data/ListOfQuotes'
 
 const URL = 'https://infinite-waters-36020.herokuapp.com/quote'
 
-
+console.log(ListOfQuotes);
 
 
 
@@ -38,22 +39,36 @@ const TypingTest = () => {
 
     const fetchQuote = async () => {
 
-        const requestOptions = {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        }
 
-        try {
-            let response = await fetch(URL, requestOptions);
-            let data = await response.json();
-            console.log(data);
-            setQuote(data.quote)
-            setAuthor(data.arthur);
-            setBtnText('Next')
-            textBar.current.focus();
-        } catch (err) {
-            console.log(err)
-        }
+        // Fetch random quote from ListOfQuotes.js in Data Folder
+
+        const lengthOfList = ListOfQuotes.length;
+        const randomNum = Math.floor(Math.random() * lengthOfList + 1);
+        const randomQuote = ListOfQuotes[randomNum];
+
+        setQuote(randomQuote.quote)
+        setAuthor(randomQuote.arthur);
+        setBtnText('Next')
+        textBar.current.focus();
+
+        // FETCH RANDOM QUOTE FROM BACKEND 
+
+        // const requestOptions = {
+        //     method: 'GET',
+        //     headers: { 'Content-Type': 'application/json' }
+        // }
+
+        // try {
+        //     let response = await fetch(URL, requestOptions);
+        //     let data = await response.json();
+        //     console.log(data);
+        //     setQuote(data.quote)
+        //     setAuthor(data.arthur);
+        //     setBtnText('Next')
+        //     textBar.current.focus();
+        // } catch (err) {
+        //     console.log(err)
+        // }
 
     }
 

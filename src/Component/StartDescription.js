@@ -15,12 +15,12 @@ const StartDescription = () => {
                 <Row>
                     <Col>
                         Click <b>Start</b> to begin test.
-                </Col>
+                    </Col>
                 </Row>
                 <Row>
                     <Col>
                         Press <b>ESC</b> To skip a quote.
-                </Col>
+                    </Col>
                 </Row>
             </Col>
         </Row >
