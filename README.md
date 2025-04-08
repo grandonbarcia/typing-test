@@ -16,9 +16,8 @@ Built with:
 ## Launching the Server
 To launch the application, please run the following command from the project root folder:
 
-``
-npm start
-``
+`npm run build`
+`npm start`
 
 ## Screenshots 
 
